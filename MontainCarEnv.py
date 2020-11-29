@@ -25,7 +25,7 @@ class MountainCar:
         # create position list for render build
         self.position_list = []
         # the time step in seconds (default 0.1)
-        self.delta_t = 0.1
+        self.delta_t = 0.01
         # set the draft state
         self.state = np.array([np.random.uniform(-0.6, -0.4), 0.0])
     
