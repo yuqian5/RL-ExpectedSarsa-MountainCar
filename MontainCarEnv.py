@@ -83,7 +83,7 @@ class MountainCar:
         '''
         This is the fuction which used to calculate hight of the position.
         '''
-        return np.sin(3 * position) 
+        return np.sin(3 * position) * 0.45 + 0.55
     
     # this part of code is modified the code from dissecting-reinforcement-learning:
     # https://github.com/mpatacchiola/dissecting-reinforcement-learning/blob/master/environments/mountain_car.py
@@ -99,7 +99,7 @@ class MountainCar:
         """
         # Plot init
         fig = plt.figure()
-        ax = fig.add_subplot(111, xlim=(-1.2, 0.5), ylim=(-1.2, 1.2))
+        ax = fig.add_subplot(111, xlim=(-1.2, 0.5), ylim=(0, 1.2))
         ax.grid(False)  # disable the grid
         xa = np.linspace(self.position_max, self.position_min, num=100)
         ya = self.p_height(xa)
