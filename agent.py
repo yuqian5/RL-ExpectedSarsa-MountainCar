@@ -135,10 +135,10 @@ class ExpectedSarsaAgent:
         # calculate expected_action_value
         expected_action_value = 0
         for action_value in action_values:
-            if action_values == max_action_value:
-                expected_action_value += p_greedy * action_values
+            if action_value == max_action_value:
+                expected_action_value += p_greedy * action_value
             else:
-                expected_action_value += p_non_greedy * action_values
+                expected_action_value += p_non_greedy * action_value
 
         # calculate last_action_value
         last_action_value = self.w[self.last_action][self.previous_tiles].sum()

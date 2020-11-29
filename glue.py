@@ -33,7 +33,7 @@ class glue:
             state, reward, done = self.env.step(action)
             if done:
                 self.w = self.agent.w
-                self.env.render(file_path="./mountainCar" + episode_num + ".mp4", mode='mp4')
+                self.env.render(file_path="./mountainCar" + str(episode_num) + ".mp4", mode='mp4')
                 self.env.reset()
                 return 0
             else:
