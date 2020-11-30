@@ -12,7 +12,25 @@ class glue:
 
         self.step_per_episode = []
 
-    def run(self, episode_count):
+    def q3(self):
+        run = []
+        for i in range(50):
+            print("***** RUN %d *****" % i)
+            self.run(200)
+            run.append(self.step_per_episode)
+            self.w = None # clear weight
+
+        run_average = []
+        for i in range(200):
+            sum = 0
+            for j in range(50):
+                sum += run[j][i]
+
+            run_average.append(sum / 50)
+
+        self.plot(run_average)
+
+    def run(self, episode_count, show_plot=False):
         run_count = 0
 
         print("Running episode %d" % run_count)
@@ -33,8 +51,9 @@ class glue:
 
             run_count += 1
 
-        self.plot()
-
+        if show_plot:
+            self.plot(self.step_per_episode)
+        
     def run_episode(self, episode_num):
         state = self.env.state
         action = None
@@ -54,8 +73,8 @@ class glue:
             else:
                 action = self.agent.agent_step(reward, state)
 
-    def plot(self):
-        plt.plot(self.step_per_episode)
+    def plot(self, data):
+        plt.plot(data)
         plt.xlabel('episodes')
         plt.ylabel('steps')
         plt.show()
@@ -63,7 +82,7 @@ class glue:
 
 def main():
     g = glue()
-    g.run(400)
+    g.q3()
 
 
 if __name__ == '__main__':
