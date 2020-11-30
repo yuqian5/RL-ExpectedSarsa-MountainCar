@@ -56,12 +56,14 @@ class glue:
 
     def plot(self):
         plt.plot(self.step_per_episode)
+        plt.xlabel('episodes')
+        plt.ylabel('steps')
         plt.show()
 
 
 def main():
     g = glue()
-    g.run(200)
+    g.run(400)
 
 
 if __name__ == '__main__':
