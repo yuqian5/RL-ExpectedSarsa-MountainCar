@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def argmax(q_values):
     """
     Takes in a list of q_values and returns the index of the item
@@ -21,6 +22,7 @@ def argmax(q_values):
             ties.append(i)
 
     return np.random.choice(ties)
+
 
 def max_action_count(action_values):
     count = 0

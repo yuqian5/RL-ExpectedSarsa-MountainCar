@@ -4,6 +4,7 @@ import tiles3 as tc
 import time
 import utility
 
+
 class MountainCarTileCoder:
     def __init__(self, iht_size=4096, num_tilings=8, num_tiles=8):
         self.iht = tc.IHT(iht_size)
