@@ -30,6 +30,33 @@ class glue:
 
         self.plot(run_average)
 
+    def q4_runner(self, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, show_plot=False):
+        run_count = 0
+
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
+
+        agent_info = {"alpha": alpha, "epsilon": epsilon, "num_tilings": num_tilings, "num_tiles": num_tiles}
+        print("Running episode %d" % run_count)
+        self.agent = agent.ExpectedSarsaAgent()
+        self.agent.agent_init(agent_info)
+
+        self.run_episode(run_count)
+
+        run_count += 1
+
+        while run_count < episode_count:
+            print("Running episode %d" % run_count)
+            agent_info["initial_weights"] = self.w
+            self.agent = agent.ExpectedSarsaAgent()
+            self.agent.agent_init(agent_info)
+
+            self.run_episode(run_count)
+
+            run_count += 1
+
+        if show_plot:
+            self.plot_with_title(self.step_per_episode, title)
+
     def run(self, episode_count, show_plot=False):
         run_count = 0
 
@@ -79,10 +106,17 @@ class glue:
         plt.ylabel('steps')
         plt.show()
 
+    def plot_with_title(self, data, title):
+        plt.plot(data)
+        plt.xlabel('episodes')
+        plt.ylabel('steps')
+        plt.title(title)
+        plt.show()
 
 def main():
     g = glue()
-    g.q3()
+    # g.q3()
+    g.q4_runner(200, 0.225, 0.0, 8, 8, True)
 
 
 if __name__ == '__main__':
