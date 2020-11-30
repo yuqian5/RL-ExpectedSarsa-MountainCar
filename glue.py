@@ -18,7 +18,7 @@ class glue:
             print("***** RUN %d *****" % i)
             self.run(200)
             run.append(self.step_per_episode)
-            self.w = None # clear weight
+            self.w = None  # clear weight
 
         run_average = []
         for i in range(200):
@@ -30,10 +30,28 @@ class glue:
 
         self.plot(run_average)
 
+    def q4(self, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
+
+        run = []
+        for i in range(10):
+            print("***** RUN %d *****" % i)
+            self.q4_runner(episode_count, alpha, epsilon, num_tilings, num_tiles)
+            run.append(self.step_per_episode)
+            self.w = None  # clear weight
+
+        run_average = []
+        for i in range(200):
+            sum = 0
+            for j in range(10):
+                sum += run[j][i]
+
+            run_average.append(sum / 10)
+
+        self.plot_with_title(run_average, title)
+
     def q4_runner(self, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, show_plot=False):
         run_count = 0
-
-        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
 
         agent_info = {"alpha": alpha, "epsilon": epsilon, "num_tilings": num_tilings, "num_tiles": num_tiles}
         print("Running episode %d" % run_count)
@@ -55,7 +73,7 @@ class glue:
             run_count += 1
 
         if show_plot:
-            self.plot_with_title(self.step_per_episode, title)
+            self.plot(self.step_per_episode)
 
     def run(self, episode_count, show_plot=False):
         run_count = 0
@@ -113,10 +131,11 @@ class glue:
         plt.title(title)
         plt.show()
 
+
 def main():
     g = glue()
     # g.q3()
-    g.q4_runner(200, 0.225, 0.0, 8, 8, True)
+    g.q4(200, 0.2, 0.0, 8, 8)
 
 
 if __name__ == '__main__':
