@@ -14,20 +14,22 @@ class glue:
 
     def q3(self):
         run = []
-        for i in range(50):
+        for i in range(2):
             print("***** RUN %d *****" % i)
             self.run(200)
-            run.append(self.step_per_episode)
+            run.append(self.step_per_episode.copy())
+            self.step_per_episode.clear()
             self.w = None  # clear weight
 
         run_average = []
         for i in range(200):
             sum = 0
-            for j in range(50):
+            for j in range(2):
                 sum += run[j][i]
 
-            run_average.append(sum / 50)
+            run_average.append(sum / 2)
 
+        print(run_average)
         self.plot(run_average)
 
     def q4(self, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
@@ -134,8 +136,9 @@ class glue:
 
 def main():
     g = glue()
-    # g.q3()
-    g.q4(200, 0.2, 0.0, 8, 8)
+    g.q3()
+    g.q3()
+    #g.q4(200, 0.2, 0.0, 8, 8)
 
 
 if __name__ == '__main__':

@@ -19,8 +19,8 @@ def plot_with_title(data, title):
     plt.show()
 
 
-def run_episode(w):
-    agent_info = {"initial_weights": w}
+def run_episode(info):
+    agent_info = info
 
     # init agent
     agent = ExpectedSarsaAgent()
@@ -43,13 +43,15 @@ def run_episode(w):
             action = agent.agent_step(reward, state)
 
 
-def run(episode_count, fdMutex, show_plot=False):
+def run(fdMutex, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, show_plot=False):
     steps_per_episode = []
     run_count = 0  # num of runs complete
-    w = 0.0  # persistent w, init to 0
+
+    agent_info = {"alpha": alpha, "epsilon": epsilon, "num_tilings": num_tilings, "num_tiles": num_tiles, "initial_weights": 0.0}
 
     while run_count < episode_count:
-        steps, w = run_episode(w)
+        steps, w = run_episode(agent_info)
+        agent_info["initial_weights"] = w
         steps_per_episode.append(steps)
 
         run_count += 1
@@ -66,16 +68,16 @@ def run(episode_count, fdMutex, show_plot=False):
     fdMutex.release()
 
 
-def q3(num_runs):
+def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
     run_result = []
     processes = []
 
     lock = multiprocessing.Lock()
 
-    for i in range(num_runs):
+    for i in range(50):
         print("Process for Run %d created" % i)
         # run independent runs in parallel
-        p = multiprocessing.Process(target=run, args=(200, lock, False))
+        p = multiprocessing.Process(target=run, args=(lock, episode_count, alpha, epsilon, num_tilings, num_tiles, False))
         p.start()
         processes.append(p)
 
@@ -98,18 +100,18 @@ def q3(num_runs):
     run_average = []
     for i in range(200):
         run_vertical_sum = 0
-        for j in range(num_runs):
+        for j in range(50):
             run_vertical_sum += int(run_result[j][i])
 
-        run_average.append(run_vertical_sum / num_runs)
+        run_average.append(run_vertical_sum / 50)
 
     print(run_result)
-    title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=0.1, b=0.0, c=8, d=8)
+    title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
     plot_with_title(run_average, title)
 
 
 def main():
-    q3(50)
+    q4(200, 0.2, 0.0, 8, 8)
 
 
 if __name__ == '__main__':
