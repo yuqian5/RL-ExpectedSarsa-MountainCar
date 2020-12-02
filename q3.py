@@ -90,6 +90,8 @@ def q3(num_runs):
             run_result.append(result.rstrip().split("\t"))
         else:
             break
+    fd.close()
+    open("ExperimentResult.tsv", "w").close()
 
     print("Calculating run average")
     run_average = []
@@ -100,6 +102,7 @@ def q3(num_runs):
 
         run_average.append(run_vertical_sum / num_runs)
 
+    print(run_result)
     plot(run_average)
 
 
