@@ -57,10 +57,8 @@ def run(episode_count, fdMutex, show_plot=False):
     if show_plot:
         plot(steps_per_episode)
 
-    print(steps_per_episode)
-
     fdMutex.acquire()
-    fd = open("ExperimentResult.txt", "a")
+    fd = open("ExperimentResult.tsv", "a")
     for i in steps_per_episode:
         fd.write(str(i) + "\t")
     fd.write("\n")
@@ -76,7 +74,7 @@ def q3(num_runs):
     for i in range(num_runs):
         print("Process for Run %d created" % i)
         # run independent runs in parallel
-        p = multiprocessing.Process(target=run, args=(200, lock, True))
+        p = multiprocessing.Process(target=run, args=(200, lock, False))
         p.start()
         processes.append(p)
 
@@ -84,21 +82,30 @@ def q3(num_runs):
         process.join()
 
     print("Retrieving Experiment Results")
-    exit(0)
+    fd = open("ExperimentResult.tsv", "r")
+    while True:
+        result = fd.readline()
+
+        if result:
+            run_result.append(result.rstrip().split("\t"))
+        else:
+            break
 
     print("Calculating run average")
     run_average = []
     for i in range(200):
         run_vertical_sum = 0
         for j in range(num_runs):
-            run_vertical_sum += run_result[j][i]
+            run_vertical_sum += int(run_result[j][i])
 
         run_average.append(run_vertical_sum / num_runs)
 
     plot(run_average)
 
+
 def main():
-    q3(10)
+    q3(5)
+    q3(5)
 
 
 if __name__ == '__main__':
