@@ -68,13 +68,13 @@ def run(fdMutex, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles
     fdMutex.release()
 
 
-def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
+def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, num_runs):
     run_result = []
     processes = []
 
     lock = multiprocessing.Lock()
 
-    for i in range(50):
+    for i in range(num_runs):
         print("Process for Run %d created" % i)
         # run independent runs in parallel
         p = multiprocessing.Process(target=run, args=(lock, episode_count, alpha, epsilon, num_tilings, num_tiles, False))
@@ -100,10 +100,10 @@ def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
     run_average = []
     for i in range(200):
         run_vertical_sum = 0
-        for j in range(50):
+        for j in range(num_runs):
             run_vertical_sum += int(run_result[j][i])
 
-        run_average.append(run_vertical_sum / 50)
+        run_average.append(run_vertical_sum / num_runs)
 
     print(run_result)
     title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
@@ -111,7 +111,31 @@ def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8):
 
 
 def main():
-    q4(200, 0.2, 0.0, 8, 8)
+    #q4(200, 0.2, 0.0, 8, 8, 50)
+    
+    times = 5
+    draft = q3(times)
+    
+    myP = q4(200, 0.2, 0, 8, 8, times)
+    
+    draft_mean = np.sum(draft)/len(draft)
+    myP_mean = np.sum(myP)/len(myP)
+    
+    draft_variance = sum([((x - draft_mean) ** 2) for x in draft]) / len(draft) 
+    draft_sdv = np.sqrt(draft_variance)
+    draft_se = draft_sdv / (np.sqrt(times))
+    
+    myP_variance = sum([((x - myP_mean) ** 2) for x in myP]) / len(myP) 
+    myP_sdv = np.sqrt(myP_variance)
+    myP_se = myP_sdv / (np.sqrt(times))
+    
+    mean_diff = draft_mean - myP_mean
+    if mean_diff < 0:
+        mean_diff = -mean_diff
+    if (mean_diff > 2.5*(np.maximum(draft_se, draft_se))):
+        print("Better")
+    else:
+        print("Not")    
 
 
 if __name__ == '__main__':
