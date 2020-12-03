@@ -2,6 +2,7 @@ from agent import ExpectedSarsaAgent, MountainCarTileCoder
 import MontainCarEnv
 import matplotlib.pyplot as plt
 import multiprocessing
+import numpy as np
 
 
 def plot(data):
@@ -68,7 +69,7 @@ def run(fdMutex, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles
     fdMutex.release()
 
 
-def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, num_runs):
+def q4(episode_count, build_plot, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, num_runs=50):
     run_result = []
     processes = []
 
@@ -105,38 +106,57 @@ def q4(episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles=8, num_ru
 
         run_average.append(run_vertical_sum / num_runs)
 
-    print(run_result)
-    title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
-    plot_with_title(run_average, title)
+    # print(run_result)
+    if (build_plot):
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
+        plot_with_title(run_average, title)
+    return run_average
 
-
-def main():
-    #q4(200, 0.2, 0.0, 8, 8, 50)
-    
-    times = 5
-    draft = q3(times)
-    
-    myP = q4(200, 0.2, 0, 8, 8, times)
+def find_better_parameters(times, alpha, epsilon, num_tilings, num_tiles, draft):
+    myP = q4(200, False, alpha, 0, 8, 8, times)
     
     draft_mean = np.sum(draft)/len(draft)
+    print("mean for draft parameters:", draft_mean)
     myP_mean = np.sum(myP)/len(myP)
-    
+    print("mean for new parameters:", myP_mean)
+
     draft_variance = sum([((x - draft_mean) ** 2) for x in draft]) / len(draft) 
     draft_sdv = np.sqrt(draft_variance)
     draft_se = draft_sdv / (np.sqrt(times))
-    
+    print("stander error for draft parameters:", draft_se)
+
     myP_variance = sum([((x - myP_mean) ** 2) for x in myP]) / len(myP) 
     myP_sdv = np.sqrt(myP_variance)
     myP_se = myP_sdv / (np.sqrt(times))
+    print("stander error for new parameters:", myP_se)
     
+    print("start comparing:")
     mean_diff = draft_mean - myP_mean
     if mean_diff < 0:
         mean_diff = -mean_diff
-    if (mean_diff > 2.5*(np.maximum(draft_se, draft_se))):
+    if (mean_diff > 2.5*(np.maximum(draft_se, myP_se))):
         print("Better")
+        if_plot = True
     else:
-        print("Not")    
+        print("Not")
+        if_plot = False
+    
+    return myP, if_plot
 
+def main():
+    #q4(200, 0.2, 0.0, 8, 8, 50)
+    times = 50
+    import q3
+    draft = q3.q3(times, False)
+    
+    alpha = 0.1005
+    epsilon = 0.0
+    num_tilings = 8
+    num_tiles = 8
+    better_list, build_polt = find_better_parameters(times, alpha, epsilon, num_tilings, num_tiles, draft)
+    if build_polt:
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings, d=num_tiles)
+        plot_with_title(better_list, title)
 
 if __name__ == '__main__':
     main()

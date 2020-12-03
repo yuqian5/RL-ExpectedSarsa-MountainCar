@@ -66,7 +66,7 @@ def run(episode_count, fdMutex, show_plot=False):
     fdMutex.release()
 
 
-def q3(num_runs):
+def q3(num_runs, build_plot):
     run_result = []
     processes = []
 
@@ -103,13 +103,15 @@ def q3(num_runs):
 
         run_average.append(run_vertical_sum / num_runs)
 
-    print(run_result)
-    title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=0.1, b=0.0, c=8, d=8)
-    plot_with_title(run_average, title)
+    # print(run_result)
+    if (build_plot):
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=0.1, b=0.0, c=8, d=8)
+        plot_with_title(run_average, title)
+    return run_average
 
 
 def main():
-    q3(50)
+    q3(50, False)
 
 
 if __name__ == '__main__':
