@@ -111,8 +111,8 @@ def q3(num_runs, build_plot):
 
 
 def main():
-    q3(50, False)
-
+    ret = q3(50, True)
+    print(ret)
 
 if __name__ == '__main__':
     main()

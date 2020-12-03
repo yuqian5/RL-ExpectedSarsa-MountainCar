@@ -6,10 +6,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-
+import time
 
 class MountainCar:
     def __init__(self):
+        # seed rnd gen
+        np.random.seed()
         # set position range
         self.position_max = 0.5
         self.position_min = -1.2
@@ -39,6 +41,10 @@ class MountainCar:
         velocity = 0.0
         self.position_list.clear()
         self.state = np.array([position, velocity])
+
+        # reseed rnd gen
+        np.random.seed()
+
         return self.state
 
     def step(self, action):

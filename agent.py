@@ -1,5 +1,4 @@
 import numpy as np
-import itertools
 import tiles3 as tc
 import time
 import utility
@@ -59,6 +58,9 @@ class ExpectedSarsaAgent:
         self.alpha = agent_info.get("alpha", 0.1) / self.num_tilings
         self.initial_weights = agent_info.get("initial_weights", 0.0)
         self.num_actions = agent_info.get("num_actions", 3)
+
+        # seed rnd gen
+        np.random.seed()
 
         # We initialize self.w to three times the iht_size. Recall this is because
         # we need to have one set of weights for each action.
@@ -130,7 +132,7 @@ class ExpectedSarsaAgent:
         for i in range(self.num_actions):
             action_values.append(self.w[i][active_tiles].sum())
         p_non_greedy = self.epsilon / self.num_actions
-        p_greedy = ((1 - self.epsilon) / utility.max_action_count(action_values)) + p_non_greedy
+        p_greedy = ((1 - self.epsilon) / utility.max_action_count(action_values))
         max_action_value = max(action_values)
 
         # calculate expected_action_value
