@@ -10,16 +10,6 @@ class MountainCarTileCoder:
         self.num_tiles = num_tiles
 
     def get_tiles(self, position, velocity):
-        """
-        Takes in a position and velocity from the mountaincar environment
-        and returns a numpy array of active tiles.
-
-        Arguments:
-        position -- float, the position of the agent between -1.2 and 0.5
-        velocity -- float, the velocity of the agent between -0.07 and 0.07
-        returns:
-        tiles - np.array, active tiles
-        """
         position_scaled = (position + 1.2) / (0.5 + 1.2) * self.num_tiles
         velocity_scaled = (velocity + 0.07) / (0.07 + 0.07) * self.num_tiles
 
@@ -57,15 +47,11 @@ class ExpectedSarsaAgent:
         self.epsilon = agent_info.get("epsilon", 0.0)
         self.gamma = agent_info.get("gamma", 1.0)
         self.alpha = agent_info.get("alpha", 0.1) / self.num_tilings
-        self.initial_weights = agent_info.get("initial_weights", np.random.uniform(0, -0.001, 1))
+        self.initial_weights = agent_info.get("initial_weights", np.random.uniform(-0.001, 0, 1)[0])
         self.num_actions = agent_info.get("num_actions", 3)
 
-        # We initialize self.w to three times the iht_size. Recall this is because
-        # we need to have one set of weights for each action.
         self.w = np.ones((self.num_actions, self.iht_size)) * self.initial_weights
 
-        # We initialize self.mctc to the mountaincar verions of the
-        # tile coder that we created
         self.tc = MountainCarTileCoder(iht_size=self.iht_size,
                                        num_tilings=self.num_tilings,
                                        num_tiles=self.num_tiles)
@@ -86,10 +72,6 @@ class ExpectedSarsaAgent:
     def agent_start(self, state):
         position, velocity = state
 
-        # Use self.tc to set active_tiles using position and velocity
-        # set current_action to the epsilon greedy chosen action using
-        # the select_action function above with the active tiles
-
         active_tiles = self.tc.get_tiles(position, velocity)
         current_action, action_value = self.select_action(active_tiles)
 
@@ -98,16 +80,7 @@ class ExpectedSarsaAgent:
         return self.last_action
 
     def agent_step(self, reward, state):
-        # choose the action here
         position, velocity = state
-
-        # Use self.tc to set active_tiles using position and velocity
-        # set current_action and action_value to the epsilon greedy chosen action using
-        # the select_action function above with the active tiles
-
-        # Update self.w at self.previous_tiles and self.previous action
-        # using the reward, action_value, self.gamma, self.w,
-        # self.alpha, and the Sarsa update from the textbook
 
         active_tiles = self.tc.get_tiles(position, velocity)
         current_action, action_value = self.select_action(active_tiles)

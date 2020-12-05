@@ -1,4 +1,4 @@
-from agent import ExpectedSarsaAgent, MountainCarTileCoder
+from agent import ExpectedSarsaAgent
 import MontainCarEnv
 import matplotlib.pyplot as plt
 import multiprocessing
@@ -113,6 +113,7 @@ def q3(num_runs, build_plot):
 def main():
     ret = q3(50, True)
     print(ret)
+
 
 if __name__ == '__main__':
     main()
