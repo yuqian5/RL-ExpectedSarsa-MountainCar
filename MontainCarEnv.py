@@ -2,6 +2,8 @@
 # https://github.com/openai/gym/blob/master/gym/envs/classic_control/mountain_car.py
 # another source for building environmennt:
 # https://github.com/mpatacchiola/dissecting-reinforcement-learning/blob/master/environments/mountain_car.py
+# one more source:
+# https://github.com/ChanchalKumarMaji/Reinforcement-Learning-Specialization/blob/master/Prediction%20and%20Control%20with%20Function%20Approximation/Week%203/Notebook:%20Function%20Approximation%20and%20Control/mountaincar_env.py
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,7 +31,11 @@ class MountainCar:
         # the time step in seconds (default 0.1)
         self.delta_t = 0.01
         # set the draft state
-        self.state = np.array([np.random.uniform(-0.6, -0.4), 0.0])
+        # self.state = np.array([np.random.uniform(-0.6, -0.4), 0.0])
+
+    def env_init(self, agent_info={}):
+        local_obesrvation = 0.0
+        self.reward_obs_term = (0.0, local_obesrvation, False)
 
     def reset(self):
         '''
@@ -43,7 +49,7 @@ class MountainCar:
         self.state = np.array([position, velocity])
 
         # reseed rnd gen
-        np.random.seed()
+        # np.random.seed()
 
         return self.state
 
@@ -63,6 +69,7 @@ class MountainCar:
         done: a boolean to check if terminate
         '''
         done = False
+        reward = -1.0
         position, velocity = self.state
         velocity += (action - 1) * self.engine_force - self.gravity * np.cos(3 * position)
         velocity = np.clip(velocity, self.velocity_min, self.velocity_max)
@@ -70,16 +77,14 @@ class MountainCar:
         position = np.clip(position, self.position_min, self.position_max)
         self.position_list.append(position)
 
-        if (position == self.position_min and velocity < 0):
-            velocity = 0
-
-        if (position >= self.target_position):
+        if (position == self.position_min):
+            velocity = 0.0
+        elif (position == self.target_position):
             done = True
+            reward = 0.0
 
-        reward = -1.0
-
-        self.state = [position, velocity]
-        return np.array(self.state), reward, done
+        self.state = np.array([position, velocity])
+        return self.state, reward, done
 
     # get the hight of the position
     # the fuction for the hight is get from issecting-reinforcement-learning:

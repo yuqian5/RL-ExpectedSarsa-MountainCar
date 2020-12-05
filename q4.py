@@ -11,6 +11,14 @@ def plot(data):
     plt.ylabel('steps')
     plt.show()
 
+def plot1(data, data2, data3):
+    plt.plot(data, label = "data1")
+    plt.plot(data2, label = "data2")
+    plt.plot(data3, label = "data3")
+    plt.xlabel('episodes')
+    plt.ylabel('steps')
+    plt.show()
+
 
 def plot_with_title(data, title):
     plt.plot(data)
@@ -20,7 +28,7 @@ def plot_with_title(data, title):
     plt.show()
 
 
-def run_episode(info):
+def run_episode(info, env_info):
     agent_info = info
 
     # init agent
@@ -29,9 +37,11 @@ def run_episode(info):
 
     # init env
     env = MontainCarEnv.MountainCar()
+    env.env_init(env_info)
+
 
     # init initial S, A and R
-    state = env.state
+    state = env.reset()
     action = agent.agent_start(state)
     reward = None
 
@@ -50,9 +60,9 @@ def run(fdMutex, episode_count, alpha=0.1, epsilon=0.0, num_tilings=8, num_tiles
 
     agent_info = {"alpha": alpha, "epsilon": epsilon, "num_tilings": num_tilings, "num_tiles": num_tiles,
                   "initial_weights": 0.0}
-
+    env_info = {"num_tilings": num_tilings, "num_tiles": num_tiles}
     while run_count < episode_count:
-        steps, w = run_episode(agent_info)
+        steps, w = run_episode(agent_info, env_info)
         agent_info["initial_weights"] = w
         steps_per_episode.append(steps)
 
@@ -117,7 +127,7 @@ def q4(episode_count, build_plot, alpha=0.1, epsilon=0.0, num_tilings=8, num_til
 
 
 def find_better_parameters(times, alpha, epsilon, num_tilings, num_tiles, draft):
-    myP = q4(200, False, alpha, 0, 8, 8, times)
+    myP = q4(200, False, alpha, epsilon, num_tilings, num_tiles, times)
 
     draft_mean = np.sum(draft) / len(draft)
     print("mean for draft parameters:", draft_mean)
@@ -152,18 +162,27 @@ def main():
     # q4(200, 0.2, 0.0, 8, 8, 50)
     times = 50
     import q3
-    draft = q3.q3(times, False)
+    draft = q3.q3(times, True)
 
     alpha = 0.2
     epsilon = 0.01
     num_tilings = 32
     num_tiles = 4
     better_list, build_polt = find_better_parameters(times, alpha, epsilon, num_tilings, num_tiles, draft)
+    
     if build_polt:
         title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings,
                                                                              d=num_tiles)
         plot_with_title(better_list, title)
+    alpha1 = 0.5
+    better_list1, build_polt1 = find_better_parameters(times, alpha1, epsilon, num_tilings, num_tiles, draft)
+    
+    if build_polt1:
+        title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha1, b=epsilon, c=num_tilings,
+                                                                             d=num_tiles)
+        plot_with_title(better_list1, title)
 
+    plot1(draft, better_list, better_list1)
 
 if __name__ == '__main__':
     main()

@@ -28,9 +28,10 @@ def run_episode(w):
 
     # init env
     env = MontainCarEnv.MountainCar()
+    env.env_init({"num_tilings": 8, "num_tiles": 8})
 
     # init initial S, A and R
-    state = env.state
+    state = env.reset()
     action = agent.agent_start(state)
     reward = None
 
