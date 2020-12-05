@@ -154,10 +154,10 @@ def main():
     import q3
     draft = q3.q3(times, False)
 
-    alpha = 0.1005
-    epsilon = 0.0
-    num_tilings = 8
-    num_tiles = 8
+    alpha = 0.2
+    epsilon = 0.01
+    num_tilings = 32
+    num_tiles = 4
     better_list, build_polt = find_better_parameters(times, alpha, epsilon, num_tilings, num_tiles, draft)
     if build_polt:
         title = "alpha={a},epsilon={b},num_tilings={c},num_tiles={d}".format(a=alpha, b=epsilon, c=num_tilings,
