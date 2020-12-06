@@ -1,4 +1,4 @@
-#RL-ExpectedSarsa-MountainCar
+# RL-ExpectedSarsa-MountainCar
 
 ## Member
 | [Yuqian Cao (yuqian5:1558141)](https://github.com/yuqian5) | [Junyao Cui (junyao1:1527740)](https://github.com/lospub) |
