@@ -38,7 +38,7 @@
 ##### Agent parameter 
 |ALPHA|EPSILON|NUM_TILE|NUM_TILING|
 |---|---|---|---|
-|0.5|0.1|4|32|
+|0.5|0.01|4|32|
 
 ##### 50 Run average
 [![](https://github.com/yuqian5/RL-ExpectedSarsa-MountainCar/blob/master/doc/0.5%5B16:49%5D.png)]()
@@ -53,8 +53,8 @@
 |ALPHA|EPSILON|NUM_TILE|NUM_TILING|Line Colour|
 |---|---|---|---|---|
 |0.1|0.0|8|8|Blue|
-|0.2|0.1|4|32|Green|
-|0.5|0.1|4|32|Red|
+|0.2|0.01|4|32|Green|
+|0.5|0.01|4|32|Red|
 
 [![](https://github.com/yuqian5/RL-ExpectedSarsa-MountainCar/blob/master/doc/compare%5B16:50%5D.png)]()
 
