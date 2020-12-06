@@ -57,3 +57,8 @@
 
 [![](https://github.com/yuqian5/RL-ExpectedSarsa-MountainCar/blob/master/doc/compare%5B16:50%5D.png)]()
 
+## Reproduce Result
+* Part 3
+* *     python3 q3.py
+* Part 3
+* *     python3 q4.py
