@@ -54,5 +54,6 @@
 |0.1|0.0|8|8|Blue|
 |0.2|0.1|4|32|Green|
 |0.5|0.1|4|32|Red|
+
 [![](https://github.com/yuqian5/RL-ExpectedSarsa-MountainCar/blob/master/doc/compare%5B16:50%5D.png)]()
 
