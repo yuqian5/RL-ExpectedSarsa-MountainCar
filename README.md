@@ -30,6 +30,7 @@
 
 ##### Mean and STD. ERROR
 |MEAN|STD. ERROR|
+|---|---|
 |653.3927|47.1082428602|
 
 ## Part 4
@@ -43,6 +44,7 @@
 
 ##### Mean and STD. ERROR
 |MEAN|STD. ERROR|
+|---|---|
 |242.4813|11.6725668508|
 
 ##### Graph Compare
