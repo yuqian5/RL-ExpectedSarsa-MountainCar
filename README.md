@@ -61,5 +61,5 @@
 ## To Repeat Experiment
 * Part 3
 * *     python3 q3.py
-* Part 3
+* Part 4
 * *     python3 q4.py
